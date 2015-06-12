@@ -11,11 +11,13 @@ public class flameScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Input.GetKey (KeyCode.UpArrow)) {
+		if (Input.GetKeyUp (KeyCode.UpArrow)) {
 			Debug.Log ("Arriba");
+			this.GetComponent<ParticleSystem>().enableEmission= true;
 		} 
-		else if (Input.GetKey (KeyCode.DownArrow)) {
+		else if (Input.GetKeyUp (KeyCode.DownArrow)) {
 			Debug.Log ("Abajo");
+			this.GetComponent<ParticleSystem>().enableEmission= false;
 		}
 	}
 }
