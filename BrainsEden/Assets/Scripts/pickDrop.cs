@@ -17,6 +17,7 @@ public class pickDrop : MonoBehaviour {
 	//DEVELOPEMENT_BUILD
 	public Text inputPos;
 	public Text	textoSelec;
+	public Text boxId;
 	
 	void Awake(){
 		Input.multiTouchEnabled = false;
@@ -28,35 +29,13 @@ public class pickDrop : MonoBehaviour {
 		#if DEVELOPMENT_BUILD
 		inputPos.gameObject.SetActive(true);
 		textoSelec.gameObject.SetActive(true);
+		boxId.gameObject.SetActive(true);
 		#endif
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
 
-	}
-
-	GameObject CheckBox(Vector3 touchPosition)
+	void Update()
 	{
-		Ray raycast = Camera.main.ScreenPointToRay (touchPosition);
-		RaycastHit raycastHit;
-		if(Physics.Raycast(raycast, out raycastHit, 100))
-	   	{
-			if(raycastHit.collider != null)
-			{
-				if(raycastHit.collider.gameObject.GetType().Equals("Box"))
-				{
-					return(raycastHit.collider.gameObject);
-				}
-			}
-		}
-		return(null);
-	}
-
-	void LateUpdate()
-	{
-		if(Input.touchCount > 0)
+		/*if(Input.touchCount > 0)
 		{
 			if(Input.touches[0].position.x > 97 && objSeleccionado!= -1)	//posicion en coordenadas de world
 			{
@@ -71,10 +50,20 @@ public class pickDrop : MonoBehaviour {
 					if(box != null)
 					{
 						Debug.Log(box.GetComponent<BoxScript>().id);
+						#if DEVELOPMENT_BUILD
+						boxId.text= "Box: " + box.GetComponent<BoxScript>().id.ToString();
+						#endif
+					}
+					else
+					{
+						#if DEVELOPMENT_BUILD
+						boxId.text= "Box: null";
+						#endif
 					}
 					//crearObjecto(objSeleccionado, Input.touches[0].position);
 					cruz.SetActive(false);
 					iconSelec.SetActive(false);
+					objSeleccionado= -1;
 				}
 				#if DEVELOPMENT_BUILD
 				inputPos.text= Input.touches[0].position.x.ToString() + " , " + Input.touches[0].position.y.ToString();
@@ -104,7 +93,12 @@ public class pickDrop : MonoBehaviour {
 		{
 			textoSelec.text="Seleccion: " + objSeleccionado;
 		}
-		#endif
+		#endif*/
+		if(Input.GetMouseButtonUp(0))
+		{
+			Debug.Log("CLICK");
+			clickIzq();
+		}
 	}
 	
 	public void BotonApretado(int objNum)
@@ -138,6 +132,35 @@ public class pickDrop : MonoBehaviour {
 		}
 	}
 	
+	public void clickIzq()
+	{
+		Debug.Log(Time.realtimeSinceStartup + "-> PANTALLA:" + Input.mousePosition);
+		Debug.Log(Time.realtimeSinceStartup + "-> MUNDO REAL:" + Camera.main.ScreenToWorldPoint(Input.mousePosition) + "\n==============");
+		CheckBox(Input.mousePosition);
+	}
+	
+	GameObject CheckBox(Vector3 touchPosition)
+	{
+		//ESTO ES LO QUE PETA 
+		Ray ray = new Ray(Camera.main.ScreenToWorldPoint(touchPosition), touchPosition + new Vector3(100, 0, 0));
+		
+		Debug.DrawLine(ray.origin, ray.direction, Color.green, 20f);
+		Debug.Log(ray);
+		
+		RaycastHit raycastHit;
+		if(Physics.Raycast(ray, out raycastHit))
+		{
+			if(raycastHit.collider != null)
+			{
+				if(raycastHit.collider.gameObject.tag.Equals("Box"))
+				{
+					return(raycastHit.collider.gameObject);
+				}
+			}
+		}
+		return(null);
+	}
+	
 	void crearObjecto(int type, Vector3 pos)
 	{	
 		if (type == 0) 
@@ -148,6 +171,5 @@ public class pickDrop : MonoBehaviour {
 		{
 			Debug.Log ("COLOCAR ESFERA");
 		}
-		objSeleccionado= -1;
 	}
 }
