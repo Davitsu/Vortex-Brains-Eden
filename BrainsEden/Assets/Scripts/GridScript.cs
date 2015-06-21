@@ -10,6 +10,8 @@ public class GridScript : MonoBehaviour {
 	public float width = 1;	//de 0 a 1
 	public float height = 1;
 	public GameObject tilePrefab;
+	private GameObject[] boxes = new GameObject[42];
+
 //	public BoxScript boxScript;
 
 	// Use this for initialization
@@ -23,7 +25,6 @@ public class GridScript : MonoBehaviour {
 		float worldHeight =  2f * Camera.main.orthographicSize;
 		float worldWidth = worldHeight * Camera.main.aspect;
 
-
 //		int numberOfBoxes = columns * rows;
 		float boxWidth = (worldWidth * width) / columns;
 		float boxHeight = (worldHeight * height) / rows;
@@ -31,13 +32,16 @@ public class GridScript : MonoBehaviour {
 		Vector3 worldBottomLeft = new Vector3(-worldWidth / 2 + boxWidth/2, -worldHeight/2 + boxHeight/2, 0);
 
 //		Vector2 upperLeftCorner = new Vector2 (-screenWidth / 2, -screenHeight / 2);
+		int counter = 0;
 		for(int i = 0; i < columns; i++)
 		{
 			for(int j = 0; j < rows; j++)
 			{
 				GameObject box = (GameObject)Instantiate(tilePrefab, worldBottomLeft + new Vector3(i*boxWidth+left, j*boxHeight+bottom, 0), tilePrefab.transform.rotation);
+				boxes[counter] = box;
 				BoxScript boxScript = box.GetComponent<BoxScript>();
-				boxScript.ScaleBox(boxWidth, boxHeight);
+				boxScript.Generate(counter, boxWidth, boxHeight);
+				counter++;
 			}
 		}
 	}
