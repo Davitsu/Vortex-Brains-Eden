@@ -36,7 +36,24 @@ public class pickDrop : MonoBehaviour {
 	{
 
 	}
-	
+
+	GameObject CheckBox(Vector3 touchPosition)
+	{
+		Ray raycast = Camera.main.ScreenPointToRay (touchPosition);
+		RaycastHit raycastHit;
+		if(Physics.Raycast(raycast, out raycastHit, 100))
+	   	{
+			if(raycastHit.collider != null)
+			{
+				if(raycastHit.collider.gameObject.GetType().Equals("Box"))
+				{
+					return(raycastHit.collider.gameObject);
+				}
+			}
+		}
+		return(null);
+	}
+
 	void LateUpdate()
 	{
 		if(Input.touchCount > 0)
@@ -50,7 +67,12 @@ public class pickDrop : MonoBehaviour {
 				}
 				else if(Input.touches[0].phase == TouchPhase.Ended)
 				{
-					crearObjecto(objSeleccionado, Input.touches[0].position);
+					GameObject box = CheckBox(Input.touches[0].position);
+					if(box != null)
+					{
+						Debug.Log(box.GetComponent<BoxScript>().id);
+					}
+					//crearObjecto(objSeleccionado, Input.touches[0].position);
 					cruz.SetActive(false);
 					iconSelec.SetActive(false);
 				}

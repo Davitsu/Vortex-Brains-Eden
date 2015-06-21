@@ -3,6 +3,9 @@ using System.Collections;
 
 public class BoxScript : MonoBehaviour {
 
+	public bool taken = false;
+	public int id;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -13,7 +16,9 @@ public class BoxScript : MonoBehaviour {
 	
 	}
 
-	public void ScaleBox(float scaleX, float scaleY) {
+	public void Generate(int id, float scaleX, float scaleY) {
 		this.transform.localScale = new Vector3 (scaleX, scaleY, 1);
+		this.id = id;
 	}
+	
 }

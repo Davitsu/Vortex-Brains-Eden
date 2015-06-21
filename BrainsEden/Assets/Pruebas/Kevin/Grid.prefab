@@ -39,10 +39,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dff76bb3fa9eade4eb3be45c99506bf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 16
+  columns: 14
   rows: 10
   bottom: 0
-  left: 0
+  left: 45
   width: 1
   height: 1
   tilePrefab: {fileID: 160942, guid: ee7ddf31a1a737e438a9dc8cc53642d0, type: 2}
@@ -52,7 +52,23 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: columns
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: tilePrefab
+      value: 
+      objectReference: {fileID: 160942, guid: ee7ddf31a1a737e438a9dc8cc53642d0, type: 2}
+    - target: {fileID: 0}
+      propertyPath: left
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: width
+      value: .800000012
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 121646}
