@@ -9,12 +9,14 @@ public class pickDrop : MonoBehaviour {
 	public Button botonCubo;
 	public Button botonEsfera;
 	public GameObject cruz;
+	public GameObject iconSelec;
+	
+	private int objSeleccionado;
+	private Image miniaturaDrag;
 	
 	//DEVELOPEMENT_BUILD
 	public Text inputPos;
 	public Text	textoSelec;
-	
-	private int objSeleccionado;
 	
 	void Awake(){
 		Input.multiTouchEnabled = false;
@@ -41,11 +43,7 @@ public class pickDrop : MonoBehaviour {
 		{
 			if(Input.touches[0].position.x > 97 && objSeleccionado!= -1)	//posicion en coordenadas de world
 			{
-				if(Input.touches[0].phase == TouchPhase.Began )	
-				{
-					
-				}
-				else if(Input.touches[0].phase == TouchPhase.Moved || Input.touches[0].phase == TouchPhase.Stationary)
+				if(Input.touches[0].phase == TouchPhase.Moved || Input.touches[0].phase == TouchPhase.Stationary)
 				{
 					cruz.gameObject.transform.position= Input.touches[0].position;
 					cruz.SetActive(true);
@@ -54,6 +52,7 @@ public class pickDrop : MonoBehaviour {
 				{
 					crearObjecto(objSeleccionado, Input.touches[0].position);
 					cruz.SetActive(false);
+					iconSelec.SetActive(false);
 				}
 				#if DEVELOPMENT_BUILD
 				inputPos.text= Input.touches[0].position.x.ToString() + " , " + Input.touches[0].position.y.ToString();
@@ -88,6 +87,7 @@ public class pickDrop : MonoBehaviour {
 	
 	public void BotonApretado(int objNum)
 	{
+		//seleccion boton
 		if(objSeleccionado == objNum)
 		{
 			objSeleccionado= -1	;	
@@ -95,6 +95,24 @@ public class pickDrop : MonoBehaviour {
 		else
 		{
 			objSeleccionado= objNum;
+		}
+		
+		//icono de seleccion
+		if(objSeleccionado!= -1)
+		{
+			if(objSeleccionado== 0)
+			{
+				iconSelec.transform.position= botonCubo.gameObject.transform.position;
+			}
+			else if (objSeleccionado== 1)
+			{
+				iconSelec.transform.position= botonEsfera.gameObject.transform.position;
+			}	
+			iconSelec.SetActive(true);
+		}
+		else
+		{
+			iconSelec.SetActive(false);
 		}
 	}
 	
