@@ -35,7 +35,7 @@ public class pickDrop : MonoBehaviour {
 
 	void Update()
 	{
-		/*if(Input.touchCount > 0)
+		if(Input.touchCount > 0)
 		{
 			if(Input.touches[0].position.x > 97 && objSeleccionado!= -1)	//posicion en coordenadas de world
 			{
@@ -46,7 +46,7 @@ public class pickDrop : MonoBehaviour {
 				}
 				else if(Input.touches[0].phase == TouchPhase.Ended)
 				{
-					GameObject box = CheckBox(Input.touches[0].position);
+					GameObject box = ComprobarBox(Input.touches[0].position);
 					if(box != null)
 					{
 						Debug.Log(box.GetComponent<BoxScript>().id);
@@ -93,14 +93,57 @@ public class pickDrop : MonoBehaviour {
 		{
 			textoSelec.text="Seleccion: " + objSeleccionado;
 		}
-		#endif*/
-		if(Input.GetMouseButtonUp(0))
+		#endif
+		/*if(Input.GetMouseButtonUp(0))
 		{
 			Debug.Log("CLICK");
-			clickIzq();
-		}
+			OnclickIzq();
+		}*/
 	}
 	
+
+	#region funciones privadas
+	GameObject ComprobarBox(Vector3 touchPosition)
+	{
+		Ray ray = Camera.main.ScreenPointToRay(touchPosition);
+		Debug.Log(ray);
+		
+		RaycastHit hit;
+		if(Physics.Raycast(ray, out hit))
+		{
+			if(hit.collider != null)
+			{
+				if(hit.collider.gameObject.tag.Equals("Box"))
+				{
+					Debug.Log (hit.collider.gameObject.GetComponent<BoxScript>().id);
+					return(hit.collider.gameObject);
+				}
+			}
+		}
+		return(null);
+	}
+	
+	void crearObjecto(int type, Vector3 pos)
+	{	
+		if (type == 0) 
+		{
+			Debug.Log ("COLOCAR CUBO");
+		} 
+		else if (type == 1) 
+		{
+			Debug.Log ("COLOCAR ESFERA");
+		}
+	}
+
+	void OnclickIzq()
+	{
+		Debug.Log(Time.realtimeSinceStartup + "-> PANTALLA:" + Input.mousePosition);
+		Debug.Log(Time.realtimeSinceStartup + "-> MUNDO REAL:" + Camera.main.ScreenToWorldPoint(Input.mousePosition) + "\n==============");
+		ComprobarBox(Input.mousePosition);
+	}
+	#endregion
+
+	#region funciones publicas
 	public void BotonApretado(int objNum)
 	{
 		//seleccion boton
@@ -131,45 +174,5 @@ public class pickDrop : MonoBehaviour {
 			iconSelec.SetActive(false);
 		}
 	}
-	
-	public void clickIzq()
-	{
-		Debug.Log(Time.realtimeSinceStartup + "-> PANTALLA:" + Input.mousePosition);
-		Debug.Log(Time.realtimeSinceStartup + "-> MUNDO REAL:" + Camera.main.ScreenToWorldPoint(Input.mousePosition) + "\n==============");
-		CheckBox(Input.mousePosition);
-	}
-	
-	GameObject CheckBox(Vector3 touchPosition)
-	{
-		//ESTO ES LO QUE PETA 
-		Ray ray = new Ray(Camera.main.ScreenToWorldPoint(touchPosition), touchPosition + new Vector3(100, 0, 0));
-		
-		Debug.DrawLine(ray.origin, ray.direction, Color.green, 20f);
-		Debug.Log(ray);
-		
-		RaycastHit raycastHit;
-		if(Physics.Raycast(ray, out raycastHit))
-		{
-			if(raycastHit.collider != null)
-			{
-				if(raycastHit.collider.gameObject.tag.Equals("Box"))
-				{
-					return(raycastHit.collider.gameObject);
-				}
-			}
-		}
-		return(null);
-	}
-	
-	void crearObjecto(int type, Vector3 pos)
-	{	
-		if (type == 0) 
-		{
-			Debug.Log ("COLOCAR CUBO");
-		} 
-		else if (type == 1) 
-		{
-			Debug.Log ("COLOCAR ESFERA");
-		}
-	}
+	#endregion
 }

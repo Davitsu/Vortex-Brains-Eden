@@ -50,4 +50,22 @@ public class GridScript : MonoBehaviour {
 	void Update () {
 		
 	}
+	#region funciones publicas
+	public void EnableFreeBoxes()
+	{
+		foreach(GameObject box in boxes)
+		{
+			if(!box.GetComponent<BoxScript>().taken)
+				box.SetActive(true);
+		}
+	}
+
+	public void DisableBoxes()
+	{
+		foreach(GameObject box in boxes)
+		{
+			box.SetActive(false);
+		}
+	}
+	#endregion
 }
