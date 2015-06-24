@@ -239,6 +239,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6c39d5e52719cd0459ef11a4d8fa1b83, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &76492706 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11464672, guid: 6c39d5e52719cd0459ef11a4d8fa1b83,
+    type: 2}
+  m_PrefabInternal: {fileID: 76492704}
+  m_Script: {fileID: 11500000, guid: dff76bb3fa9eade4eb3be45c99506bf5, type: 3}
 --- !u!1 &183471369
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,8 +830,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   botonCubo: {fileID: 1590875313}
   botonEsfera: {fileID: 696015257}
-  cruz: {fileID: 1063586674}
   iconSelec: {fileID: 332011800}
+  cruz: {fileID: 1063586674}
+  grid: {fileID: 76492706}
   inputPos: {fileID: 841733613}
   textoSelec: {fileID: 970469070}
   boxId: {fileID: 521951268}

@@ -8,8 +8,9 @@ public class pickDrop : MonoBehaviour {
 
 	public Button botonCubo;
 	public Button botonEsfera;
-	public GameObject cruz;
 	public GameObject iconSelec;
+	public GameObject cruz;
+	public GridScript grid;
 	
 	private int objSeleccionado;
 	private Image miniaturaDrag;
@@ -63,6 +64,7 @@ public class pickDrop : MonoBehaviour {
 					//crearObjecto(objSeleccionado, Input.touches[0].position);
 					cruz.SetActive(false);
 					iconSelec.SetActive(false);
+					grid.DisableBoxes();
 					objSeleccionado= -1;
 				}
 				#if DEVELOPMENT_BUILD
@@ -149,11 +151,13 @@ public class pickDrop : MonoBehaviour {
 		//seleccion boton
 		if(objSeleccionado == objNum)
 		{
-			objSeleccionado= -1	;	
+			objSeleccionado= -1	;
+			grid.DisableBoxes();
 		}
 		else
 		{
 			objSeleccionado= objNum;
+			grid.EnableFreeBoxes();
 		}
 		
 		//icono de seleccion
