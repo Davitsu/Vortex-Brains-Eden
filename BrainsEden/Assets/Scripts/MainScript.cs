@@ -11,7 +11,7 @@ public class MainScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		bool res = fade.fadeIn (new Color (0, 0, 0), 0.8f);
+		fade.fadeIn (new Color (0, 0, 0), 0.8f);
 
 		/*if (res) {
 			res = fade.fadeOut (new Color (0, 0, 0), 0.8f);

@@ -8,8 +8,9 @@ public class pickDrop : MonoBehaviour {
 
 	public Button botonCubo;
 	public Button botonEsfera;
-	public GameObject cruz;
 	public GameObject iconSelec;
+	public GameObject cruz;
+	public GridScript grid;
 	
 	private int objSeleccionado;
 	private Image miniaturaDrag;
@@ -17,6 +18,7 @@ public class pickDrop : MonoBehaviour {
 	//DEVELOPEMENT_BUILD
 	public Text inputPos;
 	public Text	textoSelec;
+	public Text boxId;
 	
 	void Awake(){
 		Input.multiTouchEnabled = false;
@@ -28,33 +30,11 @@ public class pickDrop : MonoBehaviour {
 		#if DEVELOPMENT_BUILD
 		inputPos.gameObject.SetActive(true);
 		textoSelec.gameObject.SetActive(true);
+		boxId.gameObject.SetActive(true);
 		#endif
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
 
-	}
-
-	GameObject CheckBox(Vector3 touchPosition)
-	{
-		Ray raycast = Camera.main.ScreenPointToRay (touchPosition);
-		RaycastHit raycastHit;
-		if(Physics.Raycast(raycast, out raycastHit, 100))
-	   	{
-			if(raycastHit.collider != null)
-			{
-				if(raycastHit.collider.gameObject.GetType().Equals("Box"))
-				{
-					return(raycastHit.collider.gameObject);
-				}
-			}
-		}
-		return(null);
-	}
-
-	void LateUpdate()
+	void Update()
 	{
 		if(Input.touchCount > 0)
 		{
@@ -67,14 +47,25 @@ public class pickDrop : MonoBehaviour {
 				}
 				else if(Input.touches[0].phase == TouchPhase.Ended)
 				{
-					GameObject box = CheckBox(Input.touches[0].position);
+					GameObject box = ComprobarBox(Input.touches[0].position);
 					if(box != null)
 					{
 						Debug.Log(box.GetComponent<BoxScript>().id);
+						#if DEVELOPMENT_BUILD
+						boxId.text= "Box: " + box.GetComponent<BoxScript>().id.ToString();
+						#endif
+					}
+					else
+					{
+						#if DEVELOPMENT_BUILD
+						boxId.text= "Box: null";
+						#endif
 					}
 					//crearObjecto(objSeleccionado, Input.touches[0].position);
 					cruz.SetActive(false);
 					iconSelec.SetActive(false);
+					grid.DisableBoxes();
+					objSeleccionado= -1;
 				}
 				#if DEVELOPMENT_BUILD
 				inputPos.text= Input.touches[0].position.x.ToString() + " , " + Input.touches[0].position.y.ToString();
@@ -105,18 +96,68 @@ public class pickDrop : MonoBehaviour {
 			textoSelec.text="Seleccion: " + objSeleccionado;
 		}
 		#endif
+		/*if(Input.GetMouseButtonUp(0))
+		{
+			Debug.Log("CLICK");
+			OnclickIzq();
+		}*/
 	}
 	
+
+	#region funciones privadas
+	GameObject ComprobarBox(Vector3 touchPosition)
+	{
+		Ray ray = Camera.main.ScreenPointToRay(touchPosition);
+		Debug.Log(ray);
+		
+		RaycastHit hit;
+		if(Physics.Raycast(ray, out hit))
+		{
+			if(hit.collider != null)
+			{
+				if(hit.collider.gameObject.tag.Equals("Box"))
+				{
+					Debug.Log (hit.collider.gameObject.GetComponent<BoxScript>().id);
+					return(hit.collider.gameObject);
+				}
+			}
+		}
+		return(null);
+	}
+	
+	void crearObjecto(int type, Vector3 pos)
+	{	
+		if (type == 0) 
+		{
+			Debug.Log ("COLOCAR CUBO");
+		} 
+		else if (type == 1) 
+		{
+			Debug.Log ("COLOCAR ESFERA");
+		}
+	}
+
+	void OnclickIzq()
+	{
+		Debug.Log(Time.realtimeSinceStartup + "-> PANTALLA:" + Input.mousePosition);
+		Debug.Log(Time.realtimeSinceStartup + "-> MUNDO REAL:" + Camera.main.ScreenToWorldPoint(Input.mousePosition) + "\n==============");
+		ComprobarBox(Input.mousePosition);
+	}
+	#endregion
+
+	#region funciones publicas
 	public void BotonApretado(int objNum)
 	{
 		//seleccion boton
 		if(objSeleccionado == objNum)
 		{
-			objSeleccionado= -1	;	
+			objSeleccionado= -1	;
+			grid.DisableBoxes();
 		}
 		else
 		{
 			objSeleccionado= objNum;
+			grid.EnableFreeBoxes();
 		}
 		
 		//icono de seleccion
@@ -137,17 +178,5 @@ public class pickDrop : MonoBehaviour {
 			iconSelec.SetActive(false);
 		}
 	}
-	
-	void crearObjecto(int type, Vector3 pos)
-	{	
-		if (type == 0) 
-		{
-			Debug.Log ("COLOCAR CUBO");
-		} 
-		else if (type == 1) 
-		{
-			Debug.Log ("COLOCAR ESFERA");
-		}
-		objSeleccionado= -1;
-	}
+	#endregion
 }
